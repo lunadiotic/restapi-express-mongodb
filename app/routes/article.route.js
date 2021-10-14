@@ -3,8 +3,8 @@ module.exports = app => {
 
   let router = require("express").Router();
 
-  // Create a new Tutorial
   router.post("/", article.create);
+  router.get("/", article.findAll);
 
   app.use('/api/article', router);
 };
