@@ -111,13 +111,3 @@ exports.delete = (req, res) => {
       });
     });
 };
-
-// Delete all Articles from the database.
-exports.deleteAll = (req, res) => {
-
-};
-
-// Find all published Articles
-exports.findAllPublished = (req, res) => {
-
-};
