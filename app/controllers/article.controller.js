@@ -91,7 +91,25 @@ exports.update = (req, res) => {
 
 // Delete a Article with the specified id in the request
 exports.delete = (req, res) => {
+  const id = req.params.id;
 
+  Article.findByIdAndRemove(id)
+    .then(data => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot delete Article with id=${id}. Maybe Article was not found!`
+        });
+      } else {
+        res.send({
+          message: "Article was deleted successfully!"
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Could not delete Article with id=" + id
+      });
+    });
 };
 
 // Delete all Articles from the database.
