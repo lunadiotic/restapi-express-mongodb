@@ -1,6 +1,14 @@
 const db = require("../models");
 const Article = db.article;
 
+// Pagination function
+const getPagination = (page, size) => {
+  const limit = size ? +size : 3;
+  const offset = page ? page * limit : 0;
+
+  return { limit, offset };
+};
+
 // Create and Save a new Article
 exports.create = (req, res) => {
   // Validate request
@@ -32,12 +40,18 @@ exports.create = (req, res) => {
 
 // Retrieve all Articles from the database.
 exports.findAll = (req, res) => {
-  const title = req.query.title;
+  const { page, size, title } = req.query;
   var condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
+  const { limit, offset } = getPagination(page, size);
 
-  Article.find(condition)
+  Article.paginate(condition, { limit, offset })
     .then(data => {
-      res.send(data);
+      res.send({
+        data: data.docs,
+        totalItems: data.totalDocs,
+        totalPages: data.totalPages,
+        currentPage: data.page - 1,
+      });
     })
     .catch(err => {
       res.status(500).send({
