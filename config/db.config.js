@@ -1,3 +1,3 @@
 module.exports = {
-    url: "mongodb://localhost:27017/idstack_express"
+    url: "mongodb+srv://idstack:kata123sandi@cluster0.fva16.mongodb.net/crud?retryWrites=true&w=majority"
 };
