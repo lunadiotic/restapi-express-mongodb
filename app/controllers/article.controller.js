@@ -66,7 +66,27 @@ exports.findOne = (req, res) => {
 
 // Update a Article by the id in the request
 exports.update = (req, res) => {
+  if (!req.body) {
+    return res.status(400).send({
+      message: "Data to update can not be empty!"
+    });
+  }
 
+  const id = req.params.id;
+
+  Article.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+    .then(data => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot update Article with id=${id}. Maybe Article was not found!`
+        });
+      } else res.send({ message: "Article was updated successfully." });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error updating Article with id=" + id
+      });
+    });
 };
 
 // Delete a Article with the specified id in the request
