@@ -125,3 +125,24 @@ exports.delete = (req, res) => {
       });
     });
 };
+
+exports.findAllPublished = (req, res) => {
+  const { page, size } = req.query;
+  const { limit, offset } = getPagination(page, size);
+
+  Article.paginate({ published: true }, { offset, limit })
+    .then((data) => {
+      res.send({
+        data: data.docs,
+        totalItems: data.totalDocs,
+        totalPages: data.totalPages,
+        currentPage: data.page - 1,
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving articles.",
+      });
+    });
+};
